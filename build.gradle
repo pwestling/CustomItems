@@ -1,0 +1,68 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+apply plugin: 'forge'
+apply plugin: 'java'
+
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+version = "1.0-a"
+group = "customitems"
+archivesBaseName = "CustomItems"
+def actualVersion = version
+
+logger.lifecycle "$archivesBaseName-$version"
+logger.lifecycle "" + version
+
+minecraft {
+    version = "1.7.10-10.13.0.1207"
+    assetDir = "../../MinecraftDebug/run_client/assets"
+}
+
+sourceSets {
+    api {
+        java {
+            exclude '**/layers/**'
+            exclude '**/integration/**'
+        }
+    }
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        include '**/*.lang'
+        include '**/*.info'
+        include '**/*.properties'
+
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.lang'
+        exclude '**/*.info'
+        exclude '**/*.properties'
+    }
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    appendix = 'deobf'
+}
+
+artifacts {
+    archives deobfJar
+}

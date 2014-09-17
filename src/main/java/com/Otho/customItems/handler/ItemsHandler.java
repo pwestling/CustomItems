@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.Otho.customItems.lib.constants;
 import com.Otho.customItems.mod.items.CustomItem;
 import com.Otho.customItems.util.StringUtil;
+import com.Otho.customItems.util.logHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -16,7 +17,7 @@ public class ItemsHandler {
 	public static void init()
 	{
 		JsonArray items = ConfigurationHandler.items;
-		
+		logHelper.permission = 5;
 		int i;
 		
 	
@@ -39,6 +40,7 @@ public class ItemsHandler {
 	            GameRegistry.registerItem(item, textureName);
 	            item.setUnlocalizedName(constants.MOD_ID.toLowerCase() + ":"+textureName);
 	            LanguageRegistry.instance().addStringLocalization(item.getUnlocalizedName()+".name","en_US", name);
+		    logHelper.log(constants.MOD_ID, logHelper.debug, "Created Item name:"+name+" texture:"+textureName+" stack:"+maxstackSize);		
 			}
 		}
 	}
